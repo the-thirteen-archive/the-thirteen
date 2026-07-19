@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, X } from "lucide-react";
 
 type Option = { label: string; value: string };
 
@@ -11,6 +11,7 @@ type SelectDropdownProps = {
   onChange: (values: string[]) => void;
   placeholder: string;
   multiple?: boolean;
+  align?: "left" | "right";
 };
 
 export default function SelectDropdown({
@@ -19,6 +20,7 @@ export default function SelectDropdown({
   onChange,
   placeholder,
   multiple = false,
+  align = "left",
 }: SelectDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -53,6 +55,12 @@ export default function SelectDropdown({
     }
   }
 
+  function handleClear(event: React.MouseEvent) {
+    event.stopPropagation();
+    onChange([]);
+    setIsOpen(false);
+  }
+
   const filteredOptions = options.filter((option) =>
     option.label.toLowerCase().includes(query.trim().toLowerCase()),
   );
@@ -74,15 +82,28 @@ export default function SelectDropdown({
         <span className={selected.length === 0 ? "text-gs-600" : ""}>
           {label}
         </span>
-        <ChevronDown
-          size={14}
-          strokeWidth={1.5}
-          className="shrink-0 text-gs-500"
-        />
+
+        <span className="flex shrink-0 items-center gap-1.5">
+          {selected.length > 0 && (
+            <span
+              role="button"
+              onClick={handleClear}
+              aria-label="Clear selection"
+              className="text-gs-500 hover:text-red-500 cursor-pointer"
+            >
+              <X size={13} strokeWidth={1.5} />
+            </span>
+          )}
+          <ChevronDown size={14} strokeWidth={1.5} className="text-gs-500" />
+        </span>
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 z-10 mt-1 w-full min-w-[180px] overflow-hidden rounded-lg border border-gs-800 bg-night-black">
+        <div
+          className={`absolute top-full z-10 mt-1 w-full min-w-[180px] overflow-hidden rounded-lg border border-gs-800 bg-night-black ${
+            align === "right" ? "right-0" : "left-0"
+          }`}
+        >
           <input
             ref={searchRef}
             type="text"

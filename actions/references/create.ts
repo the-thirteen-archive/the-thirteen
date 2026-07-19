@@ -38,7 +38,8 @@ export async function createReference(formData: FormData) {
       .map(async (file) => ({ ...(await uploadImage(file)), alt: null })),
   );
 
-  const tagIds = await Promise.all(tagNames.map(findOrCreateTag));
+  const resolvedTagIds = await Promise.all(tagNames.map(findOrCreateTag));
+  const tagIds = [...new Set(resolvedTagIds)];
   const metadata = metadataRaw ? JSON.parse(metadataRaw) : [];
   const links = linksRaw ? JSON.parse(linksRaw) : [];
 

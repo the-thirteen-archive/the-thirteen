@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
+import CharCounter from "../ui/charCounter";
 
 type TaxonomyFormProps = {
   isOpen: boolean;
@@ -11,7 +12,13 @@ type TaxonomyFormProps = {
   title: string;
 };
 
-export default function TaxonomyForm({ isOpen, onClose, onSave, initialName, title }: TaxonomyFormProps) {
+export default function TaxonomyForm({
+  isOpen,
+  onClose,
+  onSave,
+  initialName,
+  title,
+}: TaxonomyFormProps) {
   const [name, setName] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
@@ -48,14 +55,21 @@ export default function TaxonomyForm({ isOpen, onClose, onSave, initialName, tit
       <div className="fixed top-1/2 left-1/2 z-50 w-full max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-gs-800 bg-true-black p-6">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-base font-medium text-off-white">{title}</h3>
-          <button type="button" onClick={onClose} className="text-gs-500 hover:text-off-white cursor-pointer">
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-gs-500 hover:text-off-white cursor-pointer"
+          >
             <X size={16} strokeWidth={1.5} />
           </button>
         </div>
-
+        <div className="flex justify-end">
+          <CharCounter current={name.length} max={30} />
+        </div>
         <input
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          maxLength={30}
+          onChange={(e) => setName(e.target.value.slice(0, 30))}
           placeholder="Name"
           autoFocus
           className="w-full rounded-lg border border-gs-800 bg-night-black px-3 py-2 text-sm text-off-white outline-none focus:border-gs-600"
@@ -63,7 +77,11 @@ export default function TaxonomyForm({ isOpen, onClose, onSave, initialName, tit
         {error && <p className="mt-2 text-xs text-red-400">{error}</p>}
 
         <div className="mt-4 flex gap-3">
-          <button type="button" onClick={onClose} className="flex-1 rounded-full border border-gs-800 py-2.5 text-sm text-gs-300 hover:border-gs-600 cursor-pointer">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex-1 rounded-full border border-gs-800 py-2.5 text-sm text-gs-300 hover:border-gs-600 cursor-pointer"
+          >
             Cancel
           </button>
           <button

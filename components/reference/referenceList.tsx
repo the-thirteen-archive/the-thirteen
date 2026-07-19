@@ -29,9 +29,11 @@ export default function ReferenceListRow({
       </div>
 
       <div className="flex-1">
-        <p className="text-sm font-medium text-off-white">{reference.title}</p>
+        <p className="line-clamp-2 text-sm font-medium text-off-white">
+          {reference.title}
+        </p>
         {reference.subtitle && (
-          <p className="text-xs text-gs-500">{reference.subtitle}</p>
+          <p className="truncate text-xs text-gs-500">{reference.subtitle}</p>
         )}
       </div>
 

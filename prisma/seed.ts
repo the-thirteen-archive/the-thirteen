@@ -125,31 +125,6 @@ async function main() {
     ],
   });
 
-  console.log("🌱 Seeding Collections...");
-
-  await prisma.collection.createMany({
-    data: [
-      {
-        title: "Favorite Websites",
-        slug: "favorite-websites",
-        description: "Personal selection of inspiring websites.",
-        coverImage: { url: "", publicId: "" },
-      },
-      {
-        title: "Typography Collection",
-        slug: "typography-collection",
-        description: "References focused on typography.",
-        coverImage: { url: "", publicId: "" },
-      },
-      {
-        title: "Editorial Inspiration",
-        slug: "editorial-inspiration",
-        description: "Editorial and publication references.",
-        coverImage: { url: "", publicId: "" },
-      },
-    ],
-  });
-
   console.log("🔐 Ensuring admin Settings exist...");
 
   const existingSettings = await prisma.settings.findFirst();

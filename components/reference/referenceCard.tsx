@@ -30,11 +30,11 @@ export default function ReferenceCard({
       </div>
 
       <div className="flex flex-col gap-1">
-        <h3 className="text-sm font-medium text-off-white">
+        <h3 className="line-clamp-2 text-sm font-medium text-off-white">
           {reference.title}
         </h3>
         {reference.subtitle && (
-          <p className="text-xs text-gs-500 uppercase">{reference.subtitle}</p>
+          <p className="truncate text-xs text-gs-500">{reference.subtitle}</p>
         )}
 
         {reference.tags.length > 0 && (

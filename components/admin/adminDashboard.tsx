@@ -111,6 +111,7 @@ export default function AdminDashboard({
           onChange={setTagFilter}
           placeholder="Select Tags"
           multiple
+          align="right"
         />
       </div>
 

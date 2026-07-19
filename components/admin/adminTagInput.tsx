@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { X } from "lucide-react";
 import type { FilterOption } from "@/types/filters";
+import CharCounter from "../ui/charCounter";
 
 type AdminTagInputProps = {
   options: FilterOption[];
@@ -28,8 +29,21 @@ export default function AdminTagInput({
 
   function addTag(name: string) {
     const trimmed = name.trim();
-    if (!trimmed || value.includes(trimmed)) return;
-    onChange([...value, trimmed]);
+    if (!trimmed) return;
+
+    const alreadySelected = value.some(
+      (v) => v.toLowerCase() === trimmed.toLowerCase(),
+    );
+    if (alreadySelected) {
+      setQuery("");
+      return;
+    }
+
+    // Se já existe uma Tag com esse nome (case-insensitive), usa o casing dela — evita "Glass" e "glass" como texto diferente antes de salvar
+    const existingOption = options.find(
+      (o) => o.name.toLowerCase() === trimmed.toLowerCase(),
+    );
+    onChange([...value, existingOption ? existingOption.name : trimmed]);
     setQuery("");
     inputRef.current?.focus();
   }
@@ -67,7 +81,8 @@ export default function AdminTagInput({
           ref={inputRef}
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => setQuery(e.target.value.slice(0, 30))}
+          maxLength={30}
           onFocus={() => setIsOpen(true)}
           onBlur={() => setTimeout(() => setIsOpen(false), 100)}
           onKeyDown={handleKeyDown}
@@ -76,7 +91,10 @@ export default function AdminTagInput({
         />
       </div>
 
-      <p className="mt-1 text-xs text-gs-600">Press Enter to add</p>
+      <div className="mt-1 flex items-center justify-between">
+        <p className="text-xs text-gs-600">Press Enter to add</p>
+        <CharCounter current={query.length} max={30} />
+      </div>
 
       {isOpen && suggestions.length > 0 && (
         <ul className="absolute top-full left-0 z-10 mt-1 max-h-56 w-full overflow-y-auto rounded-lg border border-gs-800 bg-night-black">

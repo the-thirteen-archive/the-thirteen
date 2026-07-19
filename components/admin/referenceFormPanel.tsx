@@ -14,6 +14,7 @@ import { createReference } from "@/actions/references/create";
 import { updateReference } from "@/actions/references/update";
 import type { FilterOption } from "@/types/filters";
 import type { AdminReferenceRow } from "@/types/reference";
+import CharCounter from "../ui/charCounter";
 
 type ReferenceFormPanelProps = {
   isOpen: boolean;
@@ -94,6 +95,20 @@ export default function ReferenceFormPanel({
       return;
     }
 
+    const incompleteMetadata = metadata.some(
+      (f) => (f.label && !f.value) || (!f.label && f.value),
+    );
+    const incompleteLinks = links.some(
+      (l) => (l.label && !l.url) || (!l.label && l.url),
+    );
+
+    if (incompleteMetadata || incompleteLinks) {
+      setError(
+        "Metadata and/or Links fields can't be left half-filled. Fill both or remove the row.",
+      );
+      return;
+    }
+
     setIsSubmitting(true);
     setError("");
 
@@ -165,37 +180,48 @@ export default function ReferenceFormPanel({
             </button>
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
             <label className="text-xs tracking-wide text-gs-500 uppercase">
               Title*
             </label>
-            <input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="e.g. Neue Haas Grotesk"
-              className="rounded-lg border border-gs-800 bg-night-black px-3 py-2 text-sm text-off-white outline-none focus:border-gs-600"
-            />
+            <CharCounter current={title.length} max={100} />
           </div>
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value.slice(0, 100))}
+            maxLength={100}
+            placeholder="e.g. Neue Haas Grotesk"
+            className="rounded-lg border border-gs-800 bg-night-black px-3 py-2 text-sm text-off-white outline-none focus:border-gs-600"
+          />
 
           <div className="flex flex-col gap-2">
-            <label className="text-xs tracking-wide text-gs-500 uppercase">
-              Subtitle
-            </label>
+            <div className="flex items-center justify-between">
+              <label className="text-xs tracking-wide text-gs-500 uppercase">
+                Subtitle
+              </label>
+              <CharCounter current={subtitle.length} max={40} />
+            </div>
+
             <input
               value={subtitle}
-              onChange={(e) => setSubtitle(e.target.value)}
+              maxLength={40}
+              onChange={(e) => setSubtitle(e.target.value.slice(0, 40))}
               placeholder="e.g. Typeface, Studio, Singer & Songwriter..."
               className="rounded-lg border border-gs-800 bg-night-black px-3 py-2 text-sm text-off-white outline-none focus:border-gs-600"
             />
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-xs tracking-wide text-gs-500 uppercase">
-              Description
-            </label>
+            <div className="flex items-center justify-between">
+              <label className="text-xs tracking-wide text-gs-500 uppercase">
+                Description
+              </label>
+              <CharCounter current={description.length} max={600} />
+            </div>
             <textarea
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              maxLength={600}
+              onChange={(e) => setDescription(e.target.value.slice(0, 600))}
               placeholder="Describe this reference..."
               rows={4}
               className="resize-none rounded-lg border border-gs-800 bg-night-black px-3 py-2 text-sm text-off-white outline-none focus:border-gs-600"

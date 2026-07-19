@@ -143,7 +143,7 @@ export default function ReferenceModal({
               <span className="text-xs tracking-wide text-gs-500 uppercase">
                 {reference.type.name}
               </span>
-              <h2 className="mt-1 text-lg font-medium text-off-white">
+              <h2 className="mt-1 line-clamp-2 text-lg font-medium text-off-white">
                 {reference.title}
               </h2>
             </div>
@@ -188,7 +188,9 @@ export default function ReferenceModal({
                 <span className="text-xs tracking-wide text-gs-500 uppercase">
                   Description
                 </span>
-                <p className="text-sm text-gs-400">{reference.description}</p>
+                <p className="max-h-30 overflow-y-auto text-sm leading-5 text-gs-400">
+                  {reference.description}
+                </p>
               </div>
             )}
 
@@ -203,10 +205,14 @@ export default function ReferenceModal({
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between rounded-full bg-night-black border border-gs-800 px-3 py-2 text-sm text-gs-300 hover:border-gs-700 hover:text-off-white"
+                    className="flex items-center justify-between gap-2 rounded-lg border border-gs-800 px-3 py-2 text-sm text-gs-300 hover:border-gs-600 hover:text-off-white"
                   >
-                    {link.label}
-                    <ExternalLink size={14} strokeWidth={1.5} />
+                    <span className="truncate">{link.label}</span>
+                    <ExternalLink
+                      size={14}
+                      strokeWidth={1.5}
+                      className="shrink-0"
+                    />
                   </a>
                 ))}
               </div>
@@ -220,10 +226,10 @@ export default function ReferenceModal({
                 {reference.metadata.map((field) => (
                   <div
                     key={field.label}
-                    className="flex justify-between text-xs"
+                    className="flex items-center justify-between gap-2 text-xs"
                   >
-                    <span className="text-gs-500">{field.label}</span>
-                    <span className="text-gs-600">{field.value}</span>
+                    <span className="shrink-0 text-gs-500">{field.label}</span>
+                    <span className="truncate text-gs-300">{field.value}</span>
                   </div>
                 ))}
               </div>

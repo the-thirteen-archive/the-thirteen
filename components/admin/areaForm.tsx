@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import SelectDropdown from "@/components/ui/selectDropdown";
 import type { FilterOption } from "@/types/filters";
+import CharCounter from "../ui/charCounter";
 
 type AreaFormProps = {
   isOpen: boolean;
@@ -72,6 +73,12 @@ export default function AreaForm({
         </div>
 
         <div className="flex flex-col gap-3">
+        <SelectDropdown
+          options={types.map((t) => ({ label: t.name, value: t.id }))}
+          selected={typeId}
+          onChange={setTypeId}
+          placeholder="Select Type"
+        />
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -79,12 +86,9 @@ export default function AreaForm({
             autoFocus
             className="w-full rounded-lg border border-gs-800 bg-night-black px-3 py-2 text-sm text-off-white outline-none focus:border-gs-600"
           />
-          <SelectDropdown
-            options={types.map((t) => ({ label: t.name, value: t.id }))}
-            selected={typeId}
-            onChange={setTypeId}
-            placeholder="Select Type"
-          />
+          <div className="flex justify-end">
+            <CharCounter current={name.length} max={100} />
+          </div>
         </div>
 
         {error && <p className="mt-2 text-xs text-red-400">{error}</p>}
