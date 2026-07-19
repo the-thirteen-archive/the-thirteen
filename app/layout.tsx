@@ -6,9 +6,27 @@ const geist = Geist({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://the-thirteen.vercel.app";
+
 export const metadata: Metadata = {
-  title: "The Thirteen",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "The Thirteen",
+    template: "%s | The Thirteen",
+  },
   description: "A curated visual archive for design references.",
+  openGraph: {
+    title: "The Thirteen",
+    description: "A curated visual archive for design references.",
+    url: siteUrl,
+    siteName: "The Thirteen",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Thirteen",
+    description: "A curated visual archive for design references.",
+  },
 };
 
 export default function RootLayout({
